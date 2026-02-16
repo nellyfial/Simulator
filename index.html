@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ragnarok Status Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Background Video -->
+<video autoplay muted loop id="bgVideo">
+    <source src="vid/ragnarok.mp4" type="video/mp4">
+</video>
+
+<div class="container">
+
+    <!-- Character MP4 Card -->
+    <div class="character-card">
+        <video autoplay muted loop>
+            <source src="vid/karakter.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Status Table -->
+    <div class="status-panel">
+        <h2>Ragnarok Stat Simulator</h2>
+
+        <div style="margin-bottom:10px;">
+            Base Level:
+            <input type="number" id="baseLevel" value="1" min="1" max="99"
+                   onchange="updateBaseLevel()"
+                   style="width:60px; text-align:center;">
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Stats</th>
+                    <th>Job Bonus</th>
+                    <th>Pts Req</th>
+                    <th colspan="2">Status Information</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Str <input type="number" id="str" value="1" min="1" onchange="updateStats()"></td>
+                    <td>+ <span>0</span></td>
+                    <td><span id="strReq">2</span></td>
+                    <td>Atk</td>
+                    <td id="atk">1</td>
+                </tr>
+                <tr>
+                    <td>Agi <input type="number" id="agi" value="1" min="1" onchange="updateStats()"></td>
+                    <td>+ <span>0</span></td>
+                    <td><span id="agiReq">2</span></td>
+                    <td>Matk</td>
+                    <td id="matk">1~1</td>
+                </tr>
+                <tr>
+                    <td>Vit <input type="number" id="vit" value="1" min="1" onchange="updateStats()"></td>
+                    <td>+ <span>0</span></td>
+                    <td><span id="vitReq">2</span></td>
+                    <td>Def</td>
+                    <td id="def">0</td>
+                </tr>
+                <tr>
+                    <td>Int <input type="number" id="int" value="1" min="1" onchange="updateStats()"></td>
+                    <td>+ <span>0</span></td>
+                    <td><span id="intReq">2</span></td>
+                    <td>Mdef</td>
+                    <td id="mdef">0</td>
+                </tr>
+                <tr>
+                    <td>Dex <input type="number" id="dex" value="1" min="1" onchange="updateStats()"></td>
+                    <td>+ <span>0</span></td>
+                    <td><span id="dexReq">2</span></td>
+                    <td>Hit</td>
+                    <td id="hit">2</td>
+                </tr>
+                <tr>
+                    <td>Luk <input type="number" id="luk" value="1" min="1" onchange="updateStats()"></td>
+                    <td>+ <span>0</span></td>
+                    <td><span id="lukReq">2</span></td>
+                    <td>Flee</td>
+                    <td id="flee">2</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Status Points Remaining</td>
+                    <td colspan="2" id="statusPoints">0</td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td>Aspd</td>
+                    <td id="aspd">150</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
