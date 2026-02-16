@@ -14,7 +14,7 @@
 
 <div class="container">
 
-    <!-- Character MP4 Card -->
+    <!-- Character Card moved outside status panel -->
     <div class="character-card">
         <video autoplay muted loop>
             <source src="vid/karakter.mp4" type="video/mp4">
@@ -31,6 +31,23 @@
                    onchange="updateBaseLevel()"
                    style="width:60px; text-align:center;">
         </div>
+        <div class="character-setup">
+            <h3>Character Setup</h3>
+        
+            <div class="setup-row">
+                <label for="job">Select Job:</label>
+                <select id="job" disabled>
+                    <option selected>Novice</option>
+                </select>
+            </div>
+        
+            <div class="setup-row">
+                <label for="weapon">Select Weapon Type:</label>
+                <select id="weapon" disabled>
+                    <option selected>Hand</option>
+                </select>
+            </div>
+        </div>                
 
         <table>
             <thead>
