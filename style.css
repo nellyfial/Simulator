@@ -42,7 +42,7 @@ body {
 /* Character Card */
 .character-card {
     width: 380px;
-    height: 605px;
+    height: 640px;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 0 40px purple;

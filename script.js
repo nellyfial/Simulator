@@ -1,121 +1,141 @@
-let baseLevel = 1;
+// ===============================
+// RAGNAROK SIMPLE STAT SYSTEM
+// ===============================
 
-// Calculate total status points available at current base level
-function getTotalPoints() {
-    return (baseLevel - 1) * 3 + 6;  // +6 because each stat starts at 1
+// --------- HARD LIMIT FUNCTION (1–99 ONLY) ---------
+function enforceLimit(input) {
+
+    // Remove non-numbers
+    let value = input.value.replace(/\D/g, "");
+
+    // Limit to 2 digits only
+    if (value.length > 2) {
+        value = value.slice(0, 2);
+    }
+
+    // Convert to number
+    value = parseInt(value);
+
+    if (isNaN(value) || value < 1) value = 1;
+    if (value > 99) value = 99;
+
+    input.value = value;
 }
 
-function updateBaseLevel() {
-    baseLevel = Math.min(99, Math.max(1, parseInt(document.getElementById("baseLevel").value) || 1));
-    document.getElementById("baseLevel").value = baseLevel;
-    // Adjust stats if total points changed
-    updateStats();
+// --------- STAT POINT SYSTEM ---------
+
+function getPointsForLevel(level) {
+    if (level <= 4) return 3;
+    if (level >= 95) return 22;
+    return Math.floor((level - 1) / 5) + 3;
 }
 
-// Sum of all stats (Str, Agi, Vit, Int, Dex, Luk)
-function getStatsSum() {
+function getTotalStatPoints(level) {
+    let total = 48;
+
+    for (let i = 2; i <= level; i++) {
+        total += getPointsForLevel(i);
+    }
+
+    return total;
+}
+
+function getStatCost(value) {
+    return Math.min(Math.floor((value - 1) / 10) + 2, 11);
+}
+
+// --------- MAIN UPDATE FUNCTION ---------
+
+function updateStats() {
+
+    let level = parseInt(document.getElementById("baseLevel").value) || 1;
     let str = parseInt(document.getElementById("str").value) || 1;
     let agi = parseInt(document.getElementById("agi").value) || 1;
     let vit = parseInt(document.getElementById("vit").value) || 1;
-    let intl = parseInt(document.getElementById("int").value) || 1;
+    let intStat = parseInt(document.getElementById("int").value) || 1;
     let dex = parseInt(document.getElementById("dex").value) || 1;
     let luk = parseInt(document.getElementById("luk").value) || 1;
-    return str + agi + vit + intl + dex + luk;
-}
 
-function updateStats() {
-    // Clamp base level
-    baseLevel = Math.min(99, Math.max(1, baseLevel));
+    // ===== STAT POINT CALCULATION =====
+    let totalPoints = getTotalStatPoints(level);
 
-    // Get current stat values and clamp min 1
-    let stats = {
-        str: Math.max(1, parseInt(document.getElementById("str").value) || 1),
-        agi: Math.max(1, parseInt(document.getElementById("agi").value) || 1),
-        vit: Math.max(1, parseInt(document.getElementById("vit").value) || 1),
-        intl: Math.max(1, parseInt(document.getElementById("int").value) || 1),
-        dex: Math.max(1, parseInt(document.getElementById("dex").value) || 1),
-        luk: Math.max(1, parseInt(document.getElementById("luk").value) || 1)
-    };
+    let spentPoints =
+        getTotalCost(str) +
+        getTotalCost(agi) +
+        getTotalCost(vit) +
+        getTotalCost(intStat) +
+        getTotalCost(dex) +
+        getTotalCost(luk);
 
-    // Calculate sum of stat points
-    let sumStats = stats.str + stats.agi + stats.vit + stats.intl + stats.dex + stats.luk;
+    let remaining = totalPoints - spentPoints;
+    if (remaining < 0) remaining = 0;
 
-    // Calculate total points allowed
-    let totalPoints = getTotalPoints();
+    document.getElementById("statusPoints").innerText = remaining;
 
-    // If sum exceeds total, reduce excess starting from last changed stat (or proportionally)
-    if (sumStats > totalPoints) {
-        let excess = sumStats - totalPoints;
+    // ===== UPDATE PTS REQUIRED =====
+    document.getElementById("strReq").innerText = getStatCost(str);
+    document.getElementById("agiReq").innerText = getStatCost(agi);
+    document.getElementById("vitReq").innerText = getStatCost(vit);
+    document.getElementById("intReq").innerText = getStatCost(intStat);
+    document.getElementById("dexReq").innerText = getStatCost(dex);
+    document.getElementById("lukReq").innerText = getStatCost(luk);
 
-        // We'll reduce stats one by one (except minimum 1) until excess is zero
-        // Start from Luk, Dex, Int, Vit, Agi, Str order for fairness
-        const order = ['luk', 'dex', 'intl', 'vit', 'agi', 'str'];
+    // ===============================
+    // COMBAT CALCULATIONS
+    // ===============================
 
-        while (excess > 0) {
-            let reducedThisRound = false;
-            for (let statName of order) {
-                if (stats[statName] > 1 && excess > 0) {
-                    stats[statName]--;
-                    excess--;
-                    reducedThisRound = true;
-                }
-            }
-            // Safety break if no reduction possible
-            if (!reducedThisRound) break;
-        }
-    }
+    let atkBase = str + Math.floor(str / 10) ** 2;
+    let atkBonus = Math.floor(dex / 5) + Math.floor(luk / 5);
+    document.getElementById("atk").innerText = (atkBase + atkBonus) + " + 0";
 
-    // Update inputs with corrected stats
-    document.getElementById("str").value = stats.str;
-    document.getElementById("agi").value = stats.agi;
-    document.getElementById("vit").value = stats.vit;
-    document.getElementById("int").value = stats.intl;
-    document.getElementById("dex").value = stats.dex;
-    document.getElementById("luk").value = stats.luk;
+    let matkMin = intStat + Math.floor(intStat / 7) ** 2;
+    let matkMax = intStat + Math.floor(intStat / 5) ** 2;
+    document.getElementById("matk").innerText = matkMin + "~" + matkMax;
 
-    // Update Status Points Remaining display
-    let usedPoints = stats.str + stats.agi + stats.vit + stats.intl + stats.dex + stats.luk - 6; // subtract base 1 each stat
-    let remainingPoints = totalPoints - (usedPoints + 6); // base 6 included already, so simplify:
-    remainingPoints = totalPoints - (usedPoints + 6);
-    // Correction: Actually remaining points = totalPoints - usedPoints - 6 leads to negative. So better:
-    remainingPoints = totalPoints - (sumStats);
+    let defBonus = vit + Math.floor(agi / 5);
+    document.getElementById("def").innerText = "0 + " + defBonus;
 
-    document.getElementById("statusPoints").innerText = remainingPoints >= 0 ? remainingPoints : 0;
+    let mdefBonus = intStat + Math.floor(vit / 5);
+    document.getElementById("mdef").innerText = "0 + " + mdefBonus;
 
-    // Update derived stats with current values
-
-    // ATK: STR + extra from DEX and LUK per classic RO rules
-    let atkFromStr = stats.str;
-    let extraAtk = Math.floor(stats.dex / 5) + Math.floor(stats.luk / 5);
-    document.getElementById("atk").innerText = atkFromStr + extraAtk;
-
-    // MATK: min = INT + floor((INT/7)^2), max = INT + floor((INT/5)^2)
-    let minMatk = stats.intl + Math.pow(Math.floor(stats.intl / 7), 2);
-    let maxMatk = stats.intl + Math.pow(Math.floor(stats.intl / 5), 2);
-    document.getElementById("matk").innerText = `${minMatk}~${maxMatk}`;
-
-    // DEF & MDEF proxies (simple)
-    document.getElementById("def").innerText = stats.vit;
-    document.getElementById("mdef").innerText = stats.intl + Math.floor(stats.vit / 2);
-
-    // HIT: DEX + bonus from LUK
-    let hit = stats.dex + Math.floor(stats.luk / 3);
+    let hit = level + dex;
     document.getElementById("hit").innerText = hit;
 
-    // FLEE: AGI + bonus from LUK
-    let flee = stats.agi + Math.floor(stats.luk / 5);
-    document.getElementById("flee").innerText = flee;
+    let fleeBase = level + agi;
+    let fleeBonus = Math.floor(luk / 10);
+    document.getElementById("flee").innerText = fleeBase + " + " + (fleeBonus + 1);
 
-    // ASPD proxy (not full real calc)
-    let aspd = 100 + (stats.agi * 1.2) + (stats.dex * 0.6);
-    document.getElementById("aspd").innerText = Math.floor(aspd);
+    let aspd = 150 + Math.floor(agi / 5) + Math.floor(dex / 20);
+    document.getElementById("aspd").innerText = aspd;
+
+    let critical = Math.max(1, Math.floor(luk * 0.3) + 1);
+    document.getElementById("critical").innerText = critical;
 }
 
-// Initial update and add event listeners for all inputs to trigger updateStats on change
-document.getElementById("baseLevel").addEventListener("change", updateBaseLevel);
-["str", "agi", "vit", "int", "dex", "luk"].forEach(id => {
-    document.getElementById(id).addEventListener("change", updateStats);
-});
+// --------- TOTAL COST HELPER ---------
 
-// Run initial stats calculation
-updateStats();
+function getTotalCost(statValue) {
+    let total = 0;
+    for (let i = 1; i < statValue; i++) {
+        total += getStatCost(i);
+    }
+    return total;
+}
+
+// --------- AUTO ATTACH LIMITERS ---------
+
+window.onload = function () {
+
+    const ids = ["baseLevel", "str", "agi", "vit", "int", "dex", "luk"];
+
+    ids.forEach(id => {
+        const input = document.getElementById(id);
+
+        input.addEventListener("input", function () {
+            enforceLimit(this);
+            updateStats();
+        });
+    });
+
+    updateStats();
+};
