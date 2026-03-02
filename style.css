@@ -1,145 +1,259 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Trebuchet MS', sans-serif;
-}
-
 body {
-    overflow: hidden;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    margin:0;
+    font-family:'Trebuchet MS',sans-serif;
+    background:url("img/Ragnarok.jpg") center/cover no-repeat fixed;
+    color:white;
 }
-
-/* Background video */
-#bgVideo {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    z-index: -10;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-    filter: brightness(0.5);
-}
-
-/* Layout */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    gap: 10px;
-    padding: 40px;
-}
-
-/* Character Card */
-.character-card {
-    width: 380px;
-    height: 640px;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 0 40px purple;
-    flex-shrink: 0;
-}
-
-.character-card video {
+.character-box img.character-gif {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 12px;
 }
 
-/* Status Panel */
+/* Everything else remains the same from your previous CSS */
+
+body::after {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    z-index:-1;
+}
+
 .status-panel {
-    width: 750px;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: rgba(20, 0, 40, 0.4);
-    backdrop-filter: blur(8px);
-    padding: 25px;
-    border-radius: 15px;
-    border: 2px solid rgba(180, 0, 255, 0.6);
-    box-shadow: 0 0 25px rgba(180, 0, 255, 0.8);
+    width:90%;
+    max-width:1100px;
+    margin:40px auto;
+    padding:20px;
+    background:rgba(0,0,50,0.2);
+    border-radius:15px;
+    border:1px solid rgba(0,150,255,0.4);
+    backdrop-filter:blur(10px);
 }
 
-/* Table */
-table {
-    border-collapse: collapse;
-    width: 100%;
+.status-panel h2 {
+    text-align:center;
+    margin-bottom:20px;
+    font-size:26px;
+    text-shadow:0 0 6px rgba(0,150,255,0.4);
 }
 
-th, td {
-    border: 1px solid rgba(180, 0, 255, 0.6);
-    padding: 8px;
-    text-align: center;
+.main-layout {
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
 }
 
-th {
-    background: rgba(100, 0, 150, 0.5);
+.left-panel {
+    flex:0 0 260px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
 }
 
-input[type=number] {
-    width: 50px;
-    text-align: center;
-    border: 1px solid rgba(180,0,255,0.6);
-    border-radius: 4px;
-    background: rgba(30,0,50,0.3);
-    color: white;
+.character-box {
+    width:100%;
+    height:380px;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid rgba(0,150,255,0.5);
 }
 
-/* Character Setup - Styled Like Your Panel */
+.character-box video {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.hp-sp-box {
+    background:rgba(0,0,120,0.5);
+    padding:10px;
+    border-radius:10px;
+    border:1px solid rgba(0,150,255,0.5);
+}
+
+.bar-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+    font-size:14px;
+}
+
+progress {
+    width:150px;
+    height:12px;
+    border-radius:6px;
+    accent-color:#0096ff;
+}
+
+.right-panel { flex:1; }
+
 .character-setup {
-    width: 100%;
-    margin: 15px 0;
-    padding: 15px;
-    background: rgba(30, 0, 60, 0.5);
-    border: 1px solid rgba(180, 0, 255, 0.6);
-    border-radius: 10px;
-}
-
-.character-setup h3 {
-    margin-bottom: 12px;
-    text-align: center;
-    color: white;
+    padding:12px;
+    margin-bottom:15px;
+    background:rgba(0,0,100,0.45);
+    border-radius:10px;
+    border:1px solid rgba(0,150,255,0.5);
 }
 
 .setup-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    font-size: 14px;
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
 }
 
-/* Keep default arrow */
-.character-setup select {
-    width: 160px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(180,0,255,0.6);
-    background: rgba(30,0,50,0.3);
-    color: white;
+select,input[type=number] {
+    background:rgba(0,0,120,0.4);
+    border:1px solid rgba(0,150,255,0.6);
+    color:white;
+    border-radius:5px;
+    padding:4px 6px;
+    text-align:center;
 }
 
-/* Remove ugly grey disabled effect */
-.character-setup select:disabled {
-    opacity: 1;
-    cursor: default;
+/* Container for Stats and Status boxes */
+.tables-container {
+    display:flex;
+    gap:15px;
+    margin-top:10px;
 }
 
-.field {
-    margin-bottom: 15px;
+/* Box styling */
+.table-box {
+    flex:1;
+    background:rgba(0,0,50,0.15);
+    border:1px solid rgba(0,150,255,0.3);
+    border-radius:8px;
+    padding:8px;
 }
 
-.static-box {
-    padding: 8px;
-    background: #333;
-    border: 1px solid #555;
-    border-radius: 4px;
+.table-box h4 {
+    margin:5px 0 10px;
+    text-align:center;
+    color:#00bfff;
+}
+
+/* Stats table with full borders */
+.stats-table {
+    width:100%;
+    border-collapse:collapse;
+    border:1px solid rgba(0,150,255,0.5);
+}
+
+.stats-table th, .stats-table td {
+    padding:6px;
+    text-align:center;
+    border:1px solid rgba(0,150,255,0.5); /* vertical + horizontal lines */
+}
+
+/* Status table columns */
+.status-columns {
+    display:flex;
+    gap:10px;
+}
+
+.status-columns table {
+    flex:1;
+    border-collapse:collapse;
+    border:1px solid rgba(0,150,255,0.5); /* outer border */
+}
+
+.status-columns th, .status-columns td {
+    padding:4px 6px;
+    text-align:left;
+    border:1px solid rgba(0,150,255,0.5); /* full cell borders */
+}
+
+.status-columns th {
+    color:#00bfff;
+}
+
+/* Remaining Points at bottom with horizontal line */
+.status-points {
+    margin-top:6px;
+    text-align:center;
+    background:rgba(0,0,50,0.15);
+    padding:6px;
+    font-weight:bold;
+    font-size:14px;
+    border-top:5px solid rgba(0,150,255,0.5); /* only top line */
+    border-radius:0 0 6px 6px; /* rounded bottom corners */
+}
+/* Container for floating anime-style leaves/flowers */
+.floating-elements {
+    position: relative;
+    width: 100%;
+    height: 100px; /* area for floating animation */
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+/* Leaf styling */
+.floating-elements .leaf {
+    position: absolute;
+    bottom: -20px; /* start below the box */
+    font-size: 20px;
+    opacity: 0.8;
+    animation: floatAnime linear infinite;
+}
+
+/* Individual leaves: positions, sizes, speeds, delays */
+.floating-elements .leaf:nth-child(1) {
+    left: 5%;
+    font-size: 22px;
+    animation-duration: 8s;
+    animation-delay: 0s;
+}
+.floating-elements .leaf:nth-child(2) {
+    left: 25%;
+    font-size: 18px;
+    animation-duration: 10s;
+    animation-delay: 1s;
+}
+.floating-elements .leaf:nth-child(3) {
+    left: 45%;
+    font-size: 20px;
+    animation-duration: 9s;
+    animation-delay: 2s;
+}
+.floating-elements .leaf:nth-child(4) {
+    left: 65%;
+    font-size: 24px;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+.floating-elements .leaf:nth-child(5) {
+    left: 85%;
+    font-size: 18px;
+    animation-duration: 10s;
+    animation-delay: 0.8s;
+}
+
+/* Smooth floating anime-style animation */
+@keyframes floatAnime {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-60px) translateX(15px) rotate(20deg);
+    }
+    70% {
+        transform: translateY(-80px) translateX(-10px) rotate(-10deg);
+    }
+    100% {
+        transform: translateY(-120px) translateX(5px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media screen and (max-width:1000px) {
+    .main-layout { flex-direction:column; align-items:center; }
+    .tables-container { flex-direction:column; }
 }

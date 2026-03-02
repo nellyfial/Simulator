@@ -1,124 +1,138 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Ragnarok Status Panel</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Ragnarok Stat Simulator</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Background Video -->
-<video autoplay muted loop id="bgVideo">
-    <source src="vid/ragnarok.mp4" type="video/mp4">
-</video>
+<div class="status-panel">
+    <h2>Ragnarok Stat Simulator</h2>
 
-<div class="container">
-
-    <!-- Character Card moved outside status panel -->
-    <div class="character-card">
-        <video autoplay muted loop>
-            <source src="vid/karakter.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <!-- Status Table -->
-    <div class="status-panel">
-        <h2>Ragnarok Stat Simulator</h2>
-
-        <div style="margin-bottom:10px;">
-            Base Level:
-            <input type="number" id="baseLevel" value="1" min="1" max="99"
-                   onchange="updateBaseLevel()"
-                   style="width:60px; text-align:center;">
+    <div class="main-layout">
+        <!-- LEFT PANEL: Character + HP/SP -->
+        <div class="left-panel">
+            <div class="character-box">
+                <div class="character-box">
+    <img src="img/damn.gif" alt="character animation" class="character-gif">
+</div>
+            </div>
+            <div class="hp-sp-box">
+                <div class="bar-row">
+                    <span>HP</span>
+                    <progress id="hp" value="40" max="100"></progress>
+                </div>
+                <div class="bar-row">
+                    <span>SP</span>
+                    <progress id="sp" value="11" max="100"></progress>
+                </div>
+            </div>
         </div>
-        <div class="character-setup">
-            <h3>Character Setup</h3>
-       
-            <div class="setup-row">
-                <label for="job">Select Job:</label>
-                <select id="job" disabled>
-                    <option selected>Novice</option>
-                </select>
-            </div>
-       
-            <div class="setup-row">
-                <label for="weapon">Select Weapon Type:</label>
-                <select id="weapon" disabled>
-                    <option selected>Hand</option>
-                </select>
-            </div>
-        </div>                
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Stats</th>
-                    <th>Job Bonus</th>
-                    <th>Pts Req</th>
-                    <th colspan="2">Status Information</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Str <input type="number" id="str" value="1" min="1" onchange="updateStats()"></td>
-                    <td>+ <span>0</span></td>
-                    <td><span id="strReq">2</span></td>
-                    <td>Atk</td>
-                    <td id="atk">1</td>
-                </tr>
-                <tr>
-                    <td>Agi <input type="number" id="agi" value="1" min="1" onchange="updateStats()"></td>
-                    <td>+ <span>0</span></td>
-                    <td><span id="agiReq">2</span></td>
-                    <td>Matk</td>
-                    <td id="matk">1~1</td>
-                </tr>
-                <tr>
-                    <td>Vit <input type="number" id="vit" value="1" min="1" onchange="updateStats()"></td>
-                    <td>+ <span>0</span></td>
-                    <td><span id="vitReq">2</span></td>
-                    <td>Def</td>
-                    <td id="def">0</td>
-                </tr>
-                <tr>
-                    <td>Int <input type="number" id="int" value="1" min="1" onchange="updateStats()"></td>
-                    <td>+ <span>0</span></td>
-                    <td><span id="intReq">2</span></td>
-                    <td>Mdef</td>
-                    <td id="mdef">0</td>
-                </tr>
-                <tr>
-                    <td>Dex <input type="number" id="dex" value="1" min="1" onchange="updateStats()"></td>
-                    <td>+ <span>0</span></td>
-                    <td><span id="dexReq">2</span></td>
-                    <td>Hit</td>
-                    <td id="hit">2</td>
-                </tr>
-                <tr>
-                    <td>Luk <input type="number" id="luk" value="1" min="1" onchange="updateStats()"></td>
-                    <td>+ <span>0</span></td>
-                    <td><span id="lukReq">2</span></td>
-                    <td>Flee</td>
-                    <td id="flee">2</td>
-                </tr>
-                <tr>
-                    <td colspan="3">Status Points Remaining</td>
-                    <td colspan="2" id="statusPoints">0</td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td>Aspd</td>
-                    <td id="aspd">150</td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td>Critical</td>
-                    <td id="critical">1</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- RIGHT PANEL: Setup + Tables -->
+        <div class="right-panel">
+
+            <!-- Character Setup -->
+            <div class="character-setup">
+                <h3>Character Setup</h3>
+                <div class="setup-row">
+                    <label>Base Level:</label>
+                    <input type="number" id="baseLevel" value="1" min="1">
+                </div>
+                <div class="setup-row">
+                    <label>Job:</label>
+                    <select id="job">
+                        <option>Novice</option>
+                        <option>Swordsman</option>
+                        <option>Mage</option>
+                        <option>Archer</option>
+                        <option>Thief</option>
+                        <option>Acolyte</option>
+                        <option>Merchant</option>
+                    </select>
+                </div>
+                <div class="setup-row">
+                    <label>Weapon:</label>
+                    <select id="weapon">
+                        <option>Hand</option>
+                        <option>Sword</option>
+                        <option>Bow</option>
+                        <option>Staff</option>
+                        <option>Dagger</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Two side-by-side boxes -->
+            <div class="tables-container">
+
+                <!-- Stats Table Box -->
+                <div class="table-box">
+                    <h4>Stats</h4>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Stat</th>
+                                <th>Value</th>
+                                <th>Req</th>
+                                <th>Job Bonus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>STR</td><td><input type="number" id="str" value="1" min="1"></td><td id="strReq">2</td><td id="strBonus">0</td></tr>
+                            <tr><td>AGI</td><td><input type="number" id="agi" value="1" min="1"></td><td id="agiReq">2</td><td id="agiBonus">0</td></tr>
+                            <tr><td>VIT</td><td><input type="number" id="vit" value="1" min="1"></td><td id="vitReq">2</td><td id="vitBonus">0</td></tr>
+                            <tr><td>INT</td><td><input type="number" id="int" value="1" min="1"></td><td id="intReq">2</td><td id="intBonus">0</td></tr>
+                            <tr><td>DEX</td><td><input type="number" id="dex" value="1" min="1"></td><td id="dexReq">2</td><td id="dexBonus">0</td></tr>
+                            <tr><td>LUK</td><td><input type="number" id="luk" value="1" min="1"></td><td id="lukReq">2</td><td id="lukBonus">0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Status Info Box -->
+                <div class="table-box">
+                    <h4>Status Information</h4>
+                    <div class="status-columns">
+                        <!-- Left Column -->
+                        <table class="status-table">
+                            <tbody>
+                                <tr><th>ATK</th><td id="atk">1 + 0</td></tr>
+                                <tr><th>MATK</th><td id="matk">1~1</td></tr>
+                                <tr><th>HIT</th><td id="hit">2</td></tr>
+                                <tr><th>CRIT</th><td id="critical">1</td></tr>
+                            </tbody>
+                        </table>
+                        <!-- Right Column -->
+                        <table class="status-table">
+                            <tbody>
+                                <tr><th>DEF</th><td id="def">0 + 0</td></tr>
+                                <tr><th>MDEF</th><td id="mdef">0 + 0</td></tr>
+                                <tr><th>FLEE</th><td id="flee">2 + 0</td></tr>
+                                <tr><th>ASPD</th><td id="aspd">150</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <br/>
+
+                    <!-- Remaining Points inside Status Box -->
+                    <div class="status-points">
+                        Remaining Points: <span id="statusPoints">0</span>
+                    </div>
+                    <!-- Floating cartoon leaves/flowers -->
+<div class="floating-elements">
+    <div class="leaf">🍃</div>
+    <div class="leaf">🍀</div>
+    <div class="leaf">🌸</div>
+    <div class="leaf">🍁</div>
+    <div class="leaf">🌼</div>
+</div>
+                </div>
+
+            </div>
+        </div>
     </div>
-
 </div>
 
 <script src="script.js"></script>
