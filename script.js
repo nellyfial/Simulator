@@ -14,7 +14,27 @@ function getStatCost(value){
     return Math.min(Math.floor((value-1)/10)+2,11);
 }
 
-const jobData={Novice:{hpFactor:5,spFactor:3},Swordsman:{hpFactor:12,spFactor:2},Mage:{hpFactor:3,spFactor:10},Archer:{hpFactor:8,spFactor:4},Thief:{hpFactor:7,spFactor:3},Acolyte:{hpFactor:6,spFactor:8},Merchant:{hpFactor:9,spFactor:3}};
+const jobData={
+    Novice:{hpFactor:5,spFactor:3},
+    Swordsman:{hpFactor:12,spFactor:2},
+    Mage:{hpFactor:3,spFactor:10},
+    Archer:{hpFactor:8,spFactor:4},
+    Thief:{hpFactor:7,spFactor:3},
+    Acolyte:{hpFactor:6,spFactor:8},
+    Merchant:{hpFactor:9,spFactor:3}
+};
+
+// NEW: Allowed weapons per job
+const jobWeapons={
+    Novice:["Hand", "Dagger", "One-handed Sword", "One-handed Axe", "One-handed Mace", "Two-handed Mace", "Rod & Staff", "Two-handed Staff"],
+    Swordsman:["Hand","Sword", "Dagger", "One-handed Sword", "Two-handed Sword", "One-handed Spear", "Two-handed Spear", "One-handed Axe", "Two-handed Axe", "One-handed Mace", "Two-handed Mace"],
+    Mage:["Hand", "Dagger", "Rod & Staff", "Two-handed Staff"],
+    Archer:["Hand","Dagger","Bow"],
+    Thief:["Hand","Dagger", "One-handed Sword", "One-handed Axe","Bow"],
+    Acolyte:["Hand", "One-handed Mace", "Two-handed Mace", "Rod & Staff", "Two-handed Staff"],
+    Merchant:["Hand", "Dagger", "One-handed Sword", "One-handed Axe", "Two-handed Axe", "One-handed Mace", "Two-handed Mace"]
+};
+
 const weaponAspdPenalty={Hand:0,Sword:5,Bow:3,Staff:7,Dagger:1};
 
 function getTotalCost(statValue){
@@ -23,8 +43,49 @@ function getTotalCost(statValue){
     return total;
 }
 
+// NEW: Update weapon dropdown based on job
+function updateWeaponOptions(){
+    const job=document.getElementById("job").value;
+    const weaponSelect=document.getElementById("weapon");
+
+    weaponSelect.innerHTML="";
+
+    const allowed=jobWeapons[job]||["Hand"];
+
+    allowed.forEach(w=>{
+        let option=document.createElement("option");
+        option.value=w;
+        option.textContent=w;
+        weaponSelect.appendChild(option);
+    });
+}
+
 function updateStats(){
-    let level=parseInt(document.getElementById("baseLevel").value)||1;
+
+    // =========================
+    // LIMIT LEVEL 1–50 (NEW)
+    // =========================
+    // =====================
+// BASE LEVEL (1–99)
+// =====================
+let level = parseInt(document.getElementById("baseLevel").value) || 1;
+
+if(level < 1) level = 1;
+if(level > 99) level = 99;
+
+document.getElementById("baseLevel").value = level;
+
+
+// =====================
+// JOB LEVEL (1–50)
+// =====================
+let jobLevel = parseInt(document.getElementById("jobLevel").value) || 1;
+
+if(jobLevel < 1) jobLevel = 1;
+if(jobLevel > 50) jobLevel = 50;
+
+document.getElementById("jobLevel").value = jobLevel;
+
     let str=parseInt(document.getElementById("str").value)||1;
     let agi=parseInt(document.getElementById("agi").value)||1;
     let vit=parseInt(document.getElementById("vit").value)||1;
@@ -42,7 +103,7 @@ function updateStats(){
     document.getElementById("dexReq").innerText=getStatCost(dex);
     document.getElementById("lukReq").innerText=getStatCost(luk);
 
-    // Job bonus (just example 0 for now)
+    // Job bonus (example 0)
     document.getElementById("strBonus").innerText=0;
     document.getElementById("agiBonus").innerText=0;
     document.getElementById("vitBonus").innerText=0;
@@ -52,7 +113,14 @@ function updateStats(){
 
     // Remaining points
     let totalPoints=getTotalStatPoints(level);
-    let spentPoints=getTotalCost(str)+getTotalCost(agi)+getTotalCost(vit)+getTotalCost(intStat)+getTotalCost(dex)+getTotalCost(luk);
+    let spentPoints=
+        getTotalCost(str)+
+        getTotalCost(agi)+
+        getTotalCost(vit)+
+        getTotalCost(intStat)+
+        getTotalCost(dex)+
+        getTotalCost(luk);
+
     document.getElementById("statusPoints").innerText=Math.max(totalPoints-spentPoints,0);
 
     // Status formulas
@@ -72,13 +140,41 @@ function updateStats(){
     document.getElementById("flee").innerText=(level+agi)+" + "+(Math.floor(luk/10)+1);
 
     let baseAspd=160;
-    document.getElementById("aspd").innerText=baseAspd+Math.floor(agi/4)+Math.floor(dex/20)-(weaponAspdPenalty[weapon]||0);
+    document.getElementById("aspd").innerText=
+        baseAspd+Math.floor(agi/4)+Math.floor(dex/20)-(weaponAspdPenalty[weapon]||0);
 
+    // HP/SP
     let jobInfo=jobData[job]||jobData["Novice"];
-    document.getElementById("hp").value=Math.floor(35+(level*jobInfo.hpFactor)+(vit*level*0.8));
-    document.getElementById("sp").value=Math.floor(10+(level*jobInfo.spFactor)+(intStat*level*0.3));
+
+    let currentHP=Math.floor(35+(level*jobInfo.hpFactor)+(vit*level*0.8));
+    let currentSP=Math.floor(10+(level*jobInfo.spFactor)+(intStat*level*0.3));
+
+    // Max values adjusted for level 50
+    let maxHP=35+(50*12)+(99*50*0.8);
+    let maxSP=10+(50*10)+(99*50*0.3);
+
+    let hpPercent=Math.min((currentHP/maxHP)*100,100);
+    let spPercent=Math.min((currentSP/maxSP)*100,100);
+
+    document.getElementById("hpBar").style.width=hpPercent+"%";
+    document.getElementById("spBar").style.width=spPercent+"%";
+
+    document.getElementById("hpText").innerText=Math.floor(hpPercent)+"%";
+    document.getElementById("spText").innerText=Math.floor(spPercent)+"%";
 }
 
-// Add event listeners
-document.querySelectorAll("input, select").forEach(el=>el.addEventListener("change",updateStats));
-window.onload=updateStats;
+// Event listeners
+document.querySelectorAll("input, select").forEach(el=>
+    el.addEventListener("change",()=>{
+        if(el.id==="job"){
+            updateWeaponOptions(); // change weapons when job changes
+        }
+        updateStats();
+    })
+);
+
+// On load
+window.onload=()=>{
+    updateWeaponOptions();
+    updateStats();
+};

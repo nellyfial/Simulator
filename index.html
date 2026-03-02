@@ -15,17 +15,27 @@
         <div class="left-panel">
             <div class="character-box">
                 <div class="character-box">
-    <img src="img/damn.gif" alt="character animation" class="character-gif">
-</div>
+                    <img src="img/damn.gif" alt="character animation" class="character-gif">
+                </div>
             </div>
+
             <div class="hp-sp-box">
                 <div class="bar-row">
                     <span>HP</span>
-                    <progress id="hp" value="40" max="100"></progress>
+                    <div class="custom-bar">
+                        <div id="hpBar" class="fill hp-fill">
+                            <span id="hpText">0%</span>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="bar-row">
                     <span>SP</span>
-                    <progress id="sp" value="11" max="100"></progress>
+                    <div class="custom-bar">
+                        <div id="spBar" class="fill sp-fill">
+                            <span id="spText">0%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,9 +47,14 @@
             <div class="character-setup">
                 <h3>Character Setup</h3>
                 <div class="setup-row">
-                    <label>Base Level:</label>
-                    <input type="number" id="baseLevel" value="1" min="1">
-                </div>
+    <label>Base Level:</label>
+    <input type="number" id="baseLevel" value="1" min="1" max="99">
+</div>
+
+<div class="setup-row">
+    <label>Job Level:</label>
+    <input type="number" id="jobLevel" value="1" min="1" max="50">
+</div>
                 <div class="setup-row">
                     <label>Job:</label>
                     <select id="job">

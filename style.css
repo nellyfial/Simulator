@@ -81,11 +81,35 @@ body::after {
     font-size:14px;
 }
 
-progress {
+/* Custom HP/SP Bars */
+.custom-bar {
     width:150px;
-    height:12px;
-    border-radius:6px;
-    accent-color:#0096ff;
+    height:18px;
+    background:rgba(0,0,0,0.5);
+    border-radius:10px;
+    overflow:hidden;
+    position:relative;
+    border:1px solid rgba(0,150,255,0.6);
+}
+
+.fill {
+    height:100%;
+    width:0%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+    transition:width 0.4s ease;
+}
+
+.hp-fill {
+    background:linear-gradient(90deg,#ff4d4d,#ff0000);
+}
+
+.sp-fill {
+    background:linear-gradient(90deg,#4da6ff,#0066ff);
 }
 
 .right-panel { flex:1; }
