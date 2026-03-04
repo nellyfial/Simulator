@@ -1,14 +1,21 @@
 body {
     margin:0;
     font-family:'Trebuchet MS',sans-serif;
-    background:url("img/Ragnarok.jpg") center/cover no-repeat fixed;
+    background:url("img/RAGNAROK.png") center/cover no-repeat fixed;
     color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
 }
 .character-box img.character-gif {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 12px;
+    transform: scale(0.9);
+    transform-origin: center;
 }
 
 /* Everything else remains the same from your previous CSS */
@@ -24,7 +31,6 @@ body::after {
 .status-panel {
     width:90%;
     max-width:1100px;
-    margin:40px auto;
     padding:20px;
     background:rgba(0,0,50,0.2);
     border-radius:15px;
@@ -121,6 +127,9 @@ body::after {
     border-radius:10px;
     border:1px solid rgba(0,150,255,0.5);
 }
+.character-setup h3 {
+    color: #00bfff;
+}
 
 .setup-row {
     display:flex;
@@ -191,7 +200,7 @@ select,input[type=number] {
 }
 
 .status-columns th {
-    color:#00bfff;
+    color: white;
 }
 
 /* Remaining Points at bottom with horizontal line */

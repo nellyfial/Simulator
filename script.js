@@ -1,3 +1,48 @@
+function updateCharacterImage() {
+    const job = document.getElementById("job").value;  // Get selected job
+    const characterGif = document.querySelector(".character-gif");  // Select the character GIF container
+
+    // Update the character image based on selected job
+    let gifSrc = "";
+    
+    switch (job) {
+        case "Mage":
+            gifSrc = "jobs/mage.gif";
+            break;
+        case "Archer":
+            gifSrc = "jobs/archer.gif";
+            break;
+        case "Swordsman":
+            gifSrc = "jobs/swordsman.gif";
+            break;
+        case "Thief":
+            gifSrc = "jobs/thief.gif";
+            break;
+        case "Acolyte":
+            gifSrc = "jobs/acolyte.gif";
+            break;
+        case "Merchant":
+            gifSrc = "jobs/merchant.gif";
+            break;
+        case "Novice":
+        default:
+            gifSrc = "jobs/novice.gif";  // Default character (Novice)
+            break;
+    }
+
+    // Set the new image source
+    characterGif.src = gifSrc;
+}
+
+// Call updateCharacterImage whenever job selection changes
+document.getElementById("job").addEventListener("change", updateCharacterImage);
+
+// Also call it on page load to set the default image (Novice)
+window.onload = () => {
+    updateWeaponOptions();
+    updateStats();
+    updateCharacterImage();  // Update the character image based on default job
+};
 function getPointsForLevel(level){
     if(level<=4) return 3;
     if(level>=95) return 22;
