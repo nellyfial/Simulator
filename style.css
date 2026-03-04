@@ -16,9 +16,90 @@ body {
     border-radius: 12px;
     transform: scale(0.9);
     transform-origin: center;
+
+    transition: opacity 0.2s ease-in-out; /* smooth fade */
 }
 
-/* Everything else remains the same from your previous CSS */
+/* Gender Switch Container */
+.gender-switch {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+/* Switch Style */
+.switch {
+    position:relative;
+    display:inline-block;
+    width:50px;
+    height:24px;
+}
+
+.switch input {
+    opacity:0;
+    width:0;
+    height:0;
+}
+
+.slider {
+    position:absolute;
+    cursor:pointer;
+    inset:0;
+    background-color:#555;
+    transition:.3s;
+    border-radius:24px;
+}
+/* Icon glow + smooth scale transition */
+#genderIcon {
+    font-size: 24px;
+    font-weight: bold;
+    transition: 0.3s ease, transform 0.3s ease;
+}
+
+/* Male icon */
+.male-icon {
+    color: #00bfff;
+    text-shadow: 0 0 8px #00bfff;
+}
+
+/* Female icon */
+.female-icon {
+    color: #ff69b4;
+    text-shadow: 0 0 8px #ff69b4;
+}
+
+/* Bounce effect when toggled */
+.bounce {
+    animation: bounceAnim 0.3s;
+}
+
+@keyframes bounceAnim {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.slider:before {
+    content:"";
+    position:absolute;
+    height:18px;
+    width:18px;
+    left:3px;
+    bottom:3px;
+    background:white;
+    transition:.3s;
+    border-radius:50%;
+}
+
+input:checked + .slider {
+    background-color:#00bfff;
+}
+
+input:checked + .slider:before {
+    transform:translateX(26px);
+}
 
 body::after {
     content:"";

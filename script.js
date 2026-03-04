@@ -1,48 +1,50 @@
+// ===============================
+// CHARACTER IMAGE (FIXED - G FORMAT + ICON + FADE)
+// ===============================
 function updateCharacterImage() {
-    const job = document.getElementById("job").value;  // Get selected job
-    const characterGif = document.querySelector(".character-gif");  // Select the character GIF container
+    const job = document.getElementById("job").value;
+    const genderToggle = document.getElementById("genderToggle");
+    const genderIcon = document.getElementById("genderIcon");
+    const characterGif = document.querySelector(".character-gif");
 
-    // Update the character image based on selected job
-    let gifSrc = "";
-    
-    switch (job) {
-        case "Mage":
-            gifSrc = "jobs/mage.gif";
-            break;
-        case "Archer":
-            gifSrc = "jobs/archer.gif";
-            break;
-        case "Swordsman":
-            gifSrc = "jobs/swordsman.gif";
-            break;
-        case "Thief":
-            gifSrc = "jobs/thief.gif";
-            break;
-        case "Acolyte":
-            gifSrc = "jobs/acolyte.gif";
-            break;
-        case "Merchant":
-            gifSrc = "jobs/merchant.gif";
-            break;
-        case "Novice":
-        default:
-            gifSrc = "jobs/novice.gif";  // Default character (Novice)
-            break;
+    const isFemale = genderToggle && genderToggle.checked;
+
+    // Update icon + color + bounce
+    if (genderIcon) {
+        genderIcon.textContent = isFemale ? "♀" : "♂";
+
+        genderIcon.classList.remove("male-icon", "female-icon");
+        genderIcon.classList.add(isFemale ? "female-icon" : "male-icon");
+
+        // Trigger bounce animation
+        genderIcon.classList.remove("bounce"); // reset
+        void genderIcon.offsetWidth;           // force reflow
+        genderIcon.classList.add("bounce");
     }
 
-    // Set the new image source
-    characterGif.src = gifSrc;
+    // Convert job name to lowercase
+    const jobFile = job.toLowerCase();
+
+    // Female adds G (your naming format)
+    const genderSuffix = isFemale ? "G" : "";
+
+    // Final path
+    const gifSrc = `jobs/${jobFile}${genderSuffix}.gif`;
+
+    // FADE effect
+    if (characterGif) {
+        characterGif.style.opacity = 0;   // fade out
+        setTimeout(() => {
+            characterGif.src = gifSrc;    // change GIF
+            characterGif.style.opacity = 1; // fade in
+        }, 200); // match CSS transition
+    }
 }
 
-// Call updateCharacterImage whenever job selection changes
-document.getElementById("job").addEventListener("change", updateCharacterImage);
+// ===============================
+// EXISTING CODE (UNCHANGED)
+// ===============================
 
-// Also call it on page load to set the default image (Novice)
-window.onload = () => {
-    updateWeaponOptions();
-    updateStats();
-    updateCharacterImage();  // Update the character image based on default job
-};
 function getPointsForLevel(level){
     if(level<=4) return 3;
     if(level>=95) return 22;
@@ -69,7 +71,6 @@ const jobData={
     Merchant:{hpFactor:9,spFactor:3}
 };
 
-// NEW: Allowed weapons per job
 const jobWeapons={
     Novice:["Hand", "Dagger", "One-handed Sword", "One-handed Axe", "One-handed Mace", "Two-handed Mace", "Rod & Staff", "Two-handed Staff"],
     Swordsman:["Hand","Sword", "Dagger", "One-handed Sword", "Two-handed Sword", "One-handed Spear", "Two-handed Spear", "One-handed Axe", "Two-handed Axe", "One-handed Mace", "Two-handed Mace"],
@@ -88,7 +89,6 @@ function getTotalCost(statValue){
     return total;
 }
 
-// NEW: Update weapon dropdown based on job
 function updateWeaponOptions(){
     const job=document.getElementById("job").value;
     const weaponSelect=document.getElementById("weapon");
@@ -107,28 +107,14 @@ function updateWeaponOptions(){
 
 function updateStats(){
 
-    // =========================
-    // LIMIT LEVEL 1–50 (NEW)
-    // =========================
-    // =====================
-// BASE LEVEL (1–99)
-// =====================
 let level = parseInt(document.getElementById("baseLevel").value) || 1;
-
 if(level < 1) level = 1;
 if(level > 99) level = 99;
-
 document.getElementById("baseLevel").value = level;
 
-
-// =====================
-// JOB LEVEL (1–50)
-// =====================
 let jobLevel = parseInt(document.getElementById("jobLevel").value) || 1;
-
 if(jobLevel < 1) jobLevel = 1;
 if(jobLevel > 50) jobLevel = 50;
-
 document.getElementById("jobLevel").value = jobLevel;
 
     let str=parseInt(document.getElementById("str").value)||1;
@@ -140,7 +126,6 @@ document.getElementById("jobLevel").value = jobLevel;
     let job=document.getElementById("job").value;
     let weapon=document.getElementById("weapon").value;
 
-    // Req per stat
     document.getElementById("strReq").innerText=getStatCost(str);
     document.getElementById("agiReq").innerText=getStatCost(agi);
     document.getElementById("vitReq").innerText=getStatCost(vit);
@@ -148,7 +133,6 @@ document.getElementById("jobLevel").value = jobLevel;
     document.getElementById("dexReq").innerText=getStatCost(dex);
     document.getElementById("lukReq").innerText=getStatCost(luk);
 
-    // Job bonus (example 0)
     document.getElementById("strBonus").innerText=0;
     document.getElementById("agiBonus").innerText=0;
     document.getElementById("vitBonus").innerText=0;
@@ -156,7 +140,6 @@ document.getElementById("jobLevel").value = jobLevel;
     document.getElementById("dexBonus").innerText=0;
     document.getElementById("lukBonus").innerText=0;
 
-    // Remaining points
     let totalPoints=getTotalStatPoints(level);
     let spentPoints=
         getTotalCost(str)+
@@ -168,7 +151,6 @@ document.getElementById("jobLevel").value = jobLevel;
 
     document.getElementById("statusPoints").innerText=Math.max(totalPoints-spentPoints,0);
 
-    // Status formulas
     let atk=str+Math.floor(str/10)**2;
     let atkBonus=Math.floor(dex/5)+Math.floor(luk/5);
     document.getElementById("atk").innerText=atk+" + "+atkBonus;
@@ -188,13 +170,11 @@ document.getElementById("jobLevel").value = jobLevel;
     document.getElementById("aspd").innerText=
         baseAspd+Math.floor(agi/4)+Math.floor(dex/20)-(weaponAspdPenalty[weapon]||0);
 
-    // HP/SP
     let jobInfo=jobData[job]||jobData["Novice"];
 
     let currentHP=Math.floor(35+(level*jobInfo.hpFactor)+(vit*level*0.8));
     let currentSP=Math.floor(10+(level*jobInfo.spFactor)+(intStat*level*0.3));
 
-    // Max values adjusted for level 50
     let maxHP=35+(50*12)+(99*50*0.8);
     let maxSP=10+(50*10)+(99*50*0.3);
 
@@ -208,18 +188,30 @@ document.getElementById("jobLevel").value = jobLevel;
     document.getElementById("spText").innerText=Math.floor(spPercent)+"%";
 }
 
-// Event listeners
+// ===============================
+// EVENT LISTENERS (UPDATED)
+// ===============================
 document.querySelectorAll("input, select").forEach(el=>
     el.addEventListener("change",()=>{
         if(el.id==="job"){
-            updateWeaponOptions(); // change weapons when job changes
+            updateWeaponOptions();
+            updateCharacterImage();
         }
         updateStats();
     })
 );
 
-// On load
+// gender toggle listener
+const genderToggle = document.getElementById("genderToggle");
+if (genderToggle) {
+    genderToggle.addEventListener("change", updateCharacterImage);
+}
+
+// ===============================
+// ON LOAD (MERGED PROPERLY)
+// ===============================
 window.onload=()=>{
     updateWeaponOptions();
     updateStats();
+    updateCharacterImage();
 };
