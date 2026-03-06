@@ -4,40 +4,40 @@
 function updateCharacterImage() {
     const job = document.getElementById("job").value;
     const genderToggle = document.getElementById("genderToggle");
-    const genderIcon = document.getElementById("genderIcon");
+    const genderSymbol = document.querySelector(".gender-symbol");
     const characterGif = document.querySelector(".character-gif");
 
     const isFemale = genderToggle && genderToggle.checked;
 
-    // Update icon + color + bounce
-    if (genderIcon) {
-        genderIcon.textContent = isFemale ? "♀" : "♂";
+    // Update gender icon inside toggle
+    if (genderSymbol) {
+        genderSymbol.textContent = isFemale ? "♀" : "♂";
 
-        genderIcon.classList.remove("male-icon", "female-icon");
-        genderIcon.classList.add(isFemale ? "female-icon" : "male-icon");
+        genderSymbol.classList.remove("male-icon", "female-icon");
+        genderSymbol.classList.add(isFemale ? "female-icon" : "male-icon");
 
-        // Trigger bounce animation
-        genderIcon.classList.remove("bounce"); // reset
-        void genderIcon.offsetWidth;           // force reflow
-        genderIcon.classList.add("bounce");
+        // bounce animation
+        genderSymbol.classList.remove("bounce");
+        void genderSymbol.offsetWidth;
+        genderSymbol.classList.add("bounce");
     }
 
     // Convert job name to lowercase
     const jobFile = job.toLowerCase();
 
-    // Female adds G (your naming format)
+    // Female adds G
     const genderSuffix = isFemale ? "G" : "";
 
-    // Final path
     const gifSrc = `jobs/${jobFile}${genderSuffix}.gif`;
 
-    // FADE effect
+    // Fade animation
     if (characterGif) {
-        characterGif.style.opacity = 0;   // fade out
+        characterGif.style.opacity = 0;
+
         setTimeout(() => {
-            characterGif.src = gifSrc;    // change GIF
-            characterGif.style.opacity = 1; // fade in
-        }, 200); // match CSS transition
+            characterGif.src = gifSrc;
+            characterGif.style.opacity = 1;
+        }, 200);
     }
 }
 
@@ -72,13 +72,13 @@ const jobData={
 };
 
 const jobWeapons={
-    Novice:["Hand", "Dagger", "One-handed Sword", "One-handed Axe", "One-handed Mace", "Two-handed Mace", "Rod & Staff", "Two-handed Staff"],
-    Swordsman:["Hand","Sword", "Dagger", "One-handed Sword", "Two-handed Sword", "One-handed Spear", "Two-handed Spear", "One-handed Axe", "Two-handed Axe", "One-handed Mace", "Two-handed Mace"],
-    Mage:["Hand", "Dagger", "Rod & Staff", "Two-handed Staff"],
+    Novice:["Hand","Dagger","One-handed Sword","One-handed Axe","One-handed Mace","Two-handed Mace","Rod & Staff","Two-handed Staff"],
+    Swordsman:["Hand","Sword","Dagger","One-handed Sword","Two-handed Sword","One-handed Spear","Two-handed Spear","One-handed Axe","Two-handed Axe","One-handed Mace","Two-handed Mace"],
+    Mage:["Hand","Dagger","Rod & Staff","Two-handed Staff"],
     Archer:["Hand","Dagger","Bow"],
-    Thief:["Hand","Dagger", "One-handed Sword", "One-handed Axe","Bow"],
-    Acolyte:["Hand", "One-handed Mace", "Two-handed Mace", "Rod & Staff", "Two-handed Staff"],
-    Merchant:["Hand", "Dagger", "One-handed Sword", "One-handed Axe", "Two-handed Axe", "One-handed Mace", "Two-handed Mace"]
+    Thief:["Hand","Dagger","One-handed Sword","One-handed Axe","Bow"],
+    Acolyte:["Hand","One-handed Mace","Two-handed Mace","Rod & Staff","Two-handed Staff"],
+    Merchant:["Hand","Dagger","One-handed Sword","One-handed Axe","Two-handed Axe","One-handed Mace","Two-handed Mace"]
 };
 
 const weaponAspdPenalty={Hand:0,Sword:5,Bow:3,Staff:7,Dagger:1};
@@ -117,101 +117,100 @@ if(jobLevel < 1) jobLevel = 1;
 if(jobLevel > 50) jobLevel = 50;
 document.getElementById("jobLevel").value = jobLevel;
 
-    let str=parseInt(document.getElementById("str").value)||1;
-    let agi=parseInt(document.getElementById("agi").value)||1;
-    let vit=parseInt(document.getElementById("vit").value)||1;
-    let intStat=parseInt(document.getElementById("int").value)||1;
-    let dex=parseInt(document.getElementById("dex").value)||1;
-    let luk=parseInt(document.getElementById("luk").value)||1;
-    let job=document.getElementById("job").value;
-    let weapon=document.getElementById("weapon").value;
+let str=parseInt(document.getElementById("str").value)||1;
+let agi=parseInt(document.getElementById("agi").value)||1;
+let vit=parseInt(document.getElementById("vit").value)||1;
+let intStat=parseInt(document.getElementById("int").value)||1;
+let dex=parseInt(document.getElementById("dex").value)||1;
+let luk=parseInt(document.getElementById("luk").value)||1;
+let job=document.getElementById("job").value;
+let weapon=document.getElementById("weapon").value;
 
-    document.getElementById("strReq").innerText=getStatCost(str);
-    document.getElementById("agiReq").innerText=getStatCost(agi);
-    document.getElementById("vitReq").innerText=getStatCost(vit);
-    document.getElementById("intReq").innerText=getStatCost(intStat);
-    document.getElementById("dexReq").innerText=getStatCost(dex);
-    document.getElementById("lukReq").innerText=getStatCost(luk);
+document.getElementById("strReq").innerText=getStatCost(str);
+document.getElementById("agiReq").innerText=getStatCost(agi);
+document.getElementById("vitReq").innerText=getStatCost(vit);
+document.getElementById("intReq").innerText=getStatCost(intStat);
+document.getElementById("dexReq").innerText=getStatCost(dex);
+document.getElementById("lukReq").innerText=getStatCost(luk);
 
-    document.getElementById("strBonus").innerText=0;
-    document.getElementById("agiBonus").innerText=0;
-    document.getElementById("vitBonus").innerText=0;
-    document.getElementById("intBonus").innerText=0;
-    document.getElementById("dexBonus").innerText=0;
-    document.getElementById("lukBonus").innerText=0;
+document.getElementById("strBonus").innerText=0;
+document.getElementById("agiBonus").innerText=0;
+document.getElementById("vitBonus").innerText=0;
+document.getElementById("intBonus").innerText=0;
+document.getElementById("dexBonus").innerText=0;
+document.getElementById("lukBonus").innerText=0;
 
-    let totalPoints=getTotalStatPoints(level);
-    let spentPoints=
-        getTotalCost(str)+
-        getTotalCost(agi)+
-        getTotalCost(vit)+
-        getTotalCost(intStat)+
-        getTotalCost(dex)+
-        getTotalCost(luk);
+let totalPoints=getTotalStatPoints(level);
+let spentPoints=
+getTotalCost(str)+
+getTotalCost(agi)+
+getTotalCost(vit)+
+getTotalCost(intStat)+
+getTotalCost(dex)+
+getTotalCost(luk);
 
-    document.getElementById("statusPoints").innerText=Math.max(totalPoints-spentPoints,0);
+document.getElementById("statusPoints").innerText=Math.max(totalPoints-spentPoints,0);
 
-    let atk=str+Math.floor(str/10)**2;
-    let atkBonus=Math.floor(dex/5)+Math.floor(luk/5);
-    document.getElementById("atk").innerText=atk+" + "+atkBonus;
+let atk=str+Math.floor(str/10)**2;
+let atkBonus=Math.floor(dex/5)+Math.floor(luk/5);
+document.getElementById("atk").innerText=atk+" + "+atkBonus;
 
-    let matkMin=intStat+Math.floor(intStat/7)**2;
-    let matkMax=intStat+Math.floor(intStat/5)**2;
-    document.getElementById("matk").innerText=matkMin+"~"+matkMax;
+let matkMin=intStat+Math.floor(intStat/7)**2;
+let matkMax=intStat+Math.floor(intStat/5)**2;
+document.getElementById("matk").innerText=matkMin+"~"+matkMax;
 
-    document.getElementById("hit").innerText=level+dex;
-    document.getElementById("critical").innerText=Math.floor(luk/3)+1;
+document.getElementById("hit").innerText=level+dex;
+document.getElementById("critical").innerText=Math.floor(luk/3)+1;
 
-    document.getElementById("def").innerText=vit+" + "+Math.floor(agi/5);
-    document.getElementById("mdef").innerText=intStat+" + "+Math.floor(vit/5);
-    document.getElementById("flee").innerText=(level+agi)+" + "+(Math.floor(luk/10)+1);
+document.getElementById("def").innerText=vit+" + "+Math.floor(agi/5);
+document.getElementById("mdef").innerText=intStat+" + "+Math.floor(vit/5);
+document.getElementById("flee").innerText=(level+agi)+" + "+(Math.floor(luk/10)+1);
 
-    let baseAspd=160;
-    document.getElementById("aspd").innerText=
-        baseAspd+Math.floor(agi/4)+Math.floor(dex/20)-(weaponAspdPenalty[weapon]||0);
+let baseAspd=160;
+document.getElementById("aspd").innerText=
+baseAspd+Math.floor(agi/4)+Math.floor(dex/20)-(weaponAspdPenalty[weapon]||0);
 
-    let jobInfo=jobData[job]||jobData["Novice"];
+let jobInfo=jobData[job]||jobData["Novice"];
 
-    let currentHP=Math.floor(35+(level*jobInfo.hpFactor)+(vit*level*0.8));
-    let currentSP=Math.floor(10+(level*jobInfo.spFactor)+(intStat*level*0.3));
+let currentHP=Math.floor(35+(level*jobInfo.hpFactor)+(vit*level*0.8));
+let currentSP=Math.floor(10+(level*jobInfo.spFactor)+(intStat*level*0.3));
 
-    let maxHP=35+(50*12)+(99*50*0.8);
-    let maxSP=10+(50*10)+(99*50*0.3);
+let maxHP=35+(50*12)+(99*50*0.8);
+let maxSP=10+(50*10)+(99*50*0.3);
 
-    let hpPercent=Math.min((currentHP/maxHP)*100,100);
-    let spPercent=Math.min((currentSP/maxSP)*100,100);
+let hpPercent=Math.min((currentHP/maxHP)*100,100);
+let spPercent=Math.min((currentSP/maxSP)*100,100);
 
-    document.getElementById("hpBar").style.width=hpPercent+"%";
-    document.getElementById("spBar").style.width=spPercent+"%";
+document.getElementById("hpBar").style.width=hpPercent+"%";
+document.getElementById("spBar").style.width=spPercent+"%";
 
-    document.getElementById("hpText").innerText=Math.floor(hpPercent)+"%";
-    document.getElementById("spText").innerText=Math.floor(spPercent)+"%";
+document.getElementById("hpText").innerText=Math.floor(hpPercent)+"%";
+document.getElementById("spText").innerText=Math.floor(spPercent)+"%";
 }
 
 // ===============================
-// EVENT LISTENERS (UPDATED)
+// EVENT LISTENERS
 // ===============================
 document.querySelectorAll("input, select").forEach(el=>
-    el.addEventListener("change",()=>{
-        if(el.id==="job"){
-            updateWeaponOptions();
-            updateCharacterImage();
-        }
-        updateStats();
-    })
+el.addEventListener("change",()=>{
+if(el.id==="job"){
+updateWeaponOptions();
+updateCharacterImage();
+}
+updateStats();
+})
 );
 
-// gender toggle listener
 const genderToggle = document.getElementById("genderToggle");
 if (genderToggle) {
-    genderToggle.addEventListener("change", updateCharacterImage);
+genderToggle.addEventListener("change", updateCharacterImage);
 }
 
 // ===============================
-// ON LOAD (MERGED PROPERLY)
+// ON LOAD
 // ===============================
 window.onload=()=>{
-    updateWeaponOptions();
-    updateStats();
-    updateCharacterImage();
+updateWeaponOptions();
+updateStats();
+updateCharacterImage();
 };

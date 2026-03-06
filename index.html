@@ -15,12 +15,13 @@
         <div class="left-panel">
             
             <div class="gender-switch">
-    <label class="switch">
-        <input type="checkbox" id="genderToggle">
-        <span class="slider"></span>
-    </label>
-    <span id="genderIcon">♂</span>
-</div>
+                <label class="switch">
+                    <input type="checkbox" id="genderToggle">
+                    <span class="slider">
+                        <span class="gender-symbol">♂</span>
+                    </span>
+                </label>
+            </div>
 
             <div class="character-box">
                 <img src="jobs/novice.gif" alt="character animation" class="character-gif">
@@ -119,17 +120,39 @@
                         <!-- Left Column -->
                         <table class="status-table">
                             <tbody>
-                                <tr><th>ATK</th><td id="atk">1 + 0</td></tr>
-                                <tr><th>MATK</th><td id="matk">1~1</td></tr>
-                                <tr><th>HIT</th><td id="hit">2</td></tr>
-                                <tr><th>CRIT</th><td id="critical">1</td></tr>
+                                <tr>
+                                    <th><img src="icons/atk.png" class="stat-icon"> ATK</th>
+                                    <td id="atk">1 + 0</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th><img src="icons/matk.png" class="stat-icon"> MATK</th>
+                                    <td id="matk">1~1</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th><img src="icons/hit.png" class="stat-icon"> HIT</th>
+                                    <td id="hit">2</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th><img src="icons/crit.png" class="stat-icon"> CRIT</th>
+                                    <td id="critical">1</td>
+                                    </tr>
                             </tbody>
                         </table>
                         <!-- Right Column -->
                         <table class="status-table">
                             <tbody>
-                                <tr><th>DEF</th><td id="def">0 + 0</td></tr>
-                                <tr><th>MDEF</th><td id="mdef">0 + 0</td></tr>
+                                <tr>
+                                    <th><img src="icons/def.png" class="stat-icon"> DEF</th>
+                                    <td id="def">0 + 0</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th><img src="icons/mdef.png" class="stat-icon"> MDEF</th>
+                                    <td id="mdef">0 + 0</td>
+                                    </tr>
                                 <tr><th>FLEE</th><td id="flee">2 + 0</td></tr>
                                 <tr><th>ASPD</th><td id="aspd">150</td></tr>
                             </tbody>
